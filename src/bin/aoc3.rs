@@ -32,17 +32,21 @@ fn main() {
     let input = fs::read_to_string("inputs/test.txt").unwrap();
     let lines: Vec<&str> = input.lines().collect();
 
-    let mut ogr_list: Vec<&str> = Vec::from_iter( lines );
-    for bit_pos in 0..code_width{
-        if ogr_list.len() == 1 {
-            break;
+    let mut values = vec![ ]
+    for most_common in [ true, false] {
+        let mut ogr_list: Vec<&str> = Vec::from_iter( lines.clone() );
+        for bit_pos in 0..code_width{
+            if ogr_list.len() == 1 {
+                break;
+            }
+            let( ones, zeros ): (Vec<&str>, Vec<&str>) = ogr_list.iter().partition(|code| code.as_bytes()[bit_pos] == '1' as u8 );
+            if ones.len() >= zeros.len() {
+                ogr_list = ones;
+            } else {
+                ogr_list = zeros;
+            }
         }
-        let( ones, zeros ): (Vec<&str>, Vec<&str>) = ogr_list.iter().partition(|code| code.as_bytes()[bit_pos] == '1' as u8 );
-        if ones.len() >= zeros.len() {
-            ogr_list = ones;
-        } else {
-            ogr_list = zeros;
-        }
+    
     }
 
     for i in ogr_list {
