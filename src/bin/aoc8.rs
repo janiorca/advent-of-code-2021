@@ -44,23 +44,23 @@ fn main() {
             }
         }
         // Find segment F (only one used in nine )digits
-        let segment_F = segment_counts.iter().find(|(key,val)|**val==9).unwrap().0;
+        let segment_f = segment_counts.iter().find(|(_key,val)|**val==9).unwrap().0;
         // the 5-segmenter containing it is 2
-        let number_2 = segments_5.iter().position(|segs| !segs.contains(segment_F)).unwrap();
+        let number_2 = segments_5.iter().position(|segs| !segs.contains(segment_f)).unwrap();
         segments_to_digit.insert(segments_5.remove(number_2), 2 );
 
         // The segment B is the only one used by six dights
-        let segment_B = segment_counts.iter().find(|(key,val)|**val==6).unwrap().0;
+        let segment_b = segment_counts.iter().find(|(_key,val)|**val==6).unwrap().0;
         // the five segmenter containing it is 5
-        let number_5 = segments_5.iter().position(|segs| segs.contains(segment_B)).unwrap();
+        let number_5 = segments_5.iter().position(|segs| segs.contains(segment_b)).unwrap();
         segments_to_digit.insert(segments_5.remove(number_5), 5 );
         // the one the doesnt is 3
         segments_to_digit.insert(segments_5.remove(0), 3 );
 
         // The segment E is the only one used by four dights
-        let segment_E = segment_counts.iter().find(|(key,val)|**val==4).unwrap().0;
+        let segment_e = segment_counts.iter().find(|(_key,val)|**val==4).unwrap().0;
         // 9 is the only 6 segmenter that doesnt use it
-        let number_9 = segments_6.iter().position(|segs| !segs.contains(segment_E)).unwrap();
+        let number_9 = segments_6.iter().position(|segs| !segs.contains(segment_e)).unwrap();
         segments_to_digit.insert(segments_6.remove(number_9), 9 );
         
         let seg8s = segments_6[0].iter().filter(|c|*segment_counts.get(*c).unwrap() == 8).count();
