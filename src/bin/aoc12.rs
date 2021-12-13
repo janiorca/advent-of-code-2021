@@ -1,26 +1,6 @@
 use std::{fs, collections::HashMap};
 
-fn find_paths<'a>( cave_connections: &HashMap<&str,Vec<&'a str>>, found_paths: &mut Vec<Vec<&'a str>>, current_path: &Vec<&'a str> ) {
-    for destination in cave_connections.get(current_path.last().unwrap()).unwrap() {
-        // Did we reach the end
-        if (*destination).eq("end") { 
-            found_paths.push(current_path.clone());
-            continue;
-        }
-        // Are we revisiting a small cave
-        if (*destination).chars().next().unwrap().is_lowercase() {
-            if current_path.contains(&destination) {
-                continue;
-            }
-        }
-        //otherwise. keep recursing
-        let mut deeper_path: Vec<&str> = current_path.to_owned();
-        deeper_path.push(destination);
-        find_paths(cave_connections, found_paths, &deeper_path);
-    }
-}
-
-fn find_paths_2<'a>( cave_connections: &HashMap<&str,Vec<&'a str>>, found_paths: &mut Vec<Vec<&'a str>>, current_path: &Vec<&'a str>, has_multi_visit: bool ) {
+fn find_paths<'a>( cave_connections: &HashMap<&str,Vec<&'a str>>, found_paths: &mut Vec<Vec<&'a str>>, current_path: &Vec<&'a str>, has_multi_visit: bool ) {
     for destination in cave_connections.get(current_path.last().unwrap()).unwrap() {
         let mut local_multi_visit = has_multi_visit;
         if (*destination).eq("start") {  
@@ -34,7 +14,7 @@ fn find_paths_2<'a>( cave_connections: &HashMap<&str,Vec<&'a str>>, found_paths:
         }
         // Are we revisiting a small cave
         if (*destination).chars().next().unwrap().is_lowercase() {
-            // Does it already have one multi visit
+            // Does it already have one multi visit (one is allowed)
             if current_path.contains(&destination) {
                 if has_multi_visit {
                     continue;
@@ -46,7 +26,7 @@ fn find_paths_2<'a>( cave_connections: &HashMap<&str,Vec<&'a str>>, found_paths:
         //otherwise. keep recursing
         let mut deeper_path: Vec<&str> = current_path.to_owned();
         deeper_path.push(destination);
-        find_paths_2(cave_connections, found_paths, &deeper_path, local_multi_visit);
+        find_paths(cave_connections, found_paths, &deeper_path, local_multi_visit);
     }
 }
 
@@ -62,11 +42,11 @@ fn main() {
 
     // FInd all paths for part1
     let mut found_paths: Vec<Vec<&str>> = Vec::new();
-    find_paths(&cave_connections, &mut found_paths, &vec!["start"]);
+    find_paths(&cave_connections, &mut found_paths, &vec!["start"],true);
     println!( "There are {} unique paths", found_paths.len() );
 
-    // Find all paths for part2
+    // Find all paths for part2 ( same as 1 but we have not yet visited a duplicate)
     let mut found_paths: Vec<Vec<&str>> = Vec::new();
-    find_paths_2(&cave_connections, &mut found_paths, &vec!["start"], false);
+    find_paths(&cave_connections, &mut found_paths, &vec!["start"], false);
     println!( "There are {} unique paths with double visits", found_paths.len() );
 }
