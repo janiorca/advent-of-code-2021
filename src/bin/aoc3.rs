@@ -29,10 +29,10 @@ fn main() {
 
 
     // Part 2
-    let input = fs::read_to_string("inputs/test.txt").unwrap();
+    let input = fs::read_to_string("inputs/aoc3.txt").unwrap();
     let lines: Vec<&str> = input.lines().collect();
 
-    let mut values = vec![ ]
+    let mut values = Vec::new();
     for most_common in [ true, false] {
         let mut ogr_list: Vec<&str> = Vec::from_iter( lines.clone() );
         for bit_pos in 0..code_width{
@@ -40,18 +40,16 @@ fn main() {
                 break;
             }
             let( ones, zeros ): (Vec<&str>, Vec<&str>) = ogr_list.iter().partition(|code| code.as_bytes()[bit_pos] == '1' as u8 );
-            if ones.len() >= zeros.len() {
+            if (most_common && ones.len() >= zeros.len()) || (!most_common && ones.len() < zeros.len()) {
                 ogr_list = ones;
             } else {
                 ogr_list = zeros;
             }
         }
-    
+        values.push(ogr_list.pop().unwrap());
     }
-
-    for i in ogr_list {
-        println!("{}", i);
-    }    
-
+    let result: Vec<u32> = values.iter().map( |x|u32::from_str_radix(x,2).unwrap()).collect();
+    println!( "{:?}",result[0]*result[1] );
+  
 
 }
